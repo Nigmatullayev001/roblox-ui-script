@@ -114,18 +114,18 @@ local function WebhookSend(Type: string, Fields: table)
 
 	--// Webhook data
 	local TimeStamp = DateTime.now():ToIsoDate()
-	local Body = {
-		embeds = {
-			{
-				color = Color,
-				fields = Fields,
-				footer = {
-					text = "Created by MTG" -- Please keep
-				},
-				timestamp = TimeStamp
-			}
-		}
-	}
+	-- local Body = {
+	-- 	embeds = {
+	-- 		{
+	-- 			color = Color,
+	-- 			fields = Fields,
+	-- 			footer = {
+	-- 				text = "Created by MTG" -- Please keep
+	-- 			},
+	-- 			timestamp = TimeStamp
+	-- 		}
+	-- 	}
+	-- }
 
 	local RequestData = {
         Url = Webhook,
