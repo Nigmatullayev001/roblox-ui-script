@@ -44,7 +44,7 @@ closeButton.Parent = mainFrame
 spawnButton.MouseButton1Click:Connect(function()
     local itemName = inputBox.Text
     if itemName and itemName ~= "" then
-        local remote = game:GetService("ReplicatedStorage"):FindFirstChild("SpawnFruit")
+        local remote = game:GetService("ReplicatedStorage"):FindFirstChild("Spawner")
         if remote then
             remote:FireServer(itemName)
             messageLabel.Text = "✅ '" .. itemName .. "' yuborildi!"
