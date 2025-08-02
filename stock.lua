@@ -1,6 +1,5 @@
 --[[
     @author depso (depthso)
-    @tutorial https://www.youtube.com/watch?v=4I5qXqYB3vc
     @description Grow a Garden stock bot script
     https://www.roblox.com/games/126884695634066
 ]]
@@ -114,18 +113,18 @@ local function WebhookSend(Type: string, Fields: table)
 
 	--// Webhook data
 	local TimeStamp = DateTime.now():ToIsoDate()
-	-- local Body = {
-	-- 	embeds = {
-	-- 		{
-	-- 			color = Color,
-	-- 			fields = Fields,
-	-- 			footer = {
-	-- 				text = "Created by MTG" -- Please keep
-	-- 			},
-	-- 			timestamp = TimeStamp
-	-- 		}
-	-- 	}
-	-- }
+	local Body = {
+		embeds = {
+			{
+				color = Color,
+				fields = Fields,
+				footer = {
+					text = "Created by depso" -- Please keep
+				},
+				timestamp = TimeStamp
+			}
+		}
+	}
 
 	local RequestData = {
         Url = Webhook,
@@ -224,7 +223,7 @@ GuiService.ErrorMessageChanged:Connect(function()
 	local AutoReconnect = GetConfigValue("Auto-Reconnect")
 	if not AutoReconnect then return end
 
-	queue_on_teleport("https://raw.githubusercontent.com/Nigmatullayev001/roblox-ui-script/main/stock.lua")
+	queue_on_teleport("https://rawscripts.net/raw/Grow-a-Garden-Grow-a-Garden-Stock-bot-41500")
 
 	--// Join a different server if the player is solo
 	if IsSingle then
