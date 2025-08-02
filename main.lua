@@ -2,6 +2,7 @@ local player = game.Players.LocalPlayer
 local screenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 screenGui.Name = "ItemSpawnUI"
 screenGui.ResetOnSpawn = false
+warn("ReplicatedStorage children:", game:GetService("ReplicatedStorage"):GetChildren())
 
 -- 🎁 Asosiy oyna (modal frame)
 local mainFrame = Instance.new("Frame")
@@ -60,7 +61,7 @@ spawnButton.MouseButton1Click:Connect(function()
             messageLabel.Text = "✅ '" .. itemName .. "' yuborildi!"
         else
             messageLabel.Text = "❌ RemoteEvent topilmadi!"
-            warn("ReplicatedStorage children:", game:GetService("ReplicatedStorage"):GetChildren())
+            
 
         end
     else
