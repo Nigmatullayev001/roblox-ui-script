@@ -60,7 +60,7 @@ spawnButton.MouseButton1Click:Connect(function()
             messageLabel.Text = "✅ '" .. itemName .. "' yuborildi!"
         else
             messageLabel.Text = "❌ RemoteEvent topilmadi!"
-            print("ReplicatedStorage children:", game:GetService("ReplicatedStorage"):GetChildren())
+            warn("ReplicatedStorage children:", game:GetService("ReplicatedStorage"):GetChildren())
 
         end
     else
