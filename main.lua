@@ -1,9 +1,12 @@
-local player = game.Players.LocalPlayer
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local player = Players.LocalPlayer
+
+-- 🔳 UI yaratish
 local screenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 screenGui.Name = "SpawnUI"
 screenGui.ResetOnSpawn = false
 
--- 📦 Main frame
 local mainFrame = Instance.new("Frame")
 mainFrame.Size = UDim2.new(0, 300, 0, 200)
 mainFrame.Position = UDim2.new(0.5, -150, 0.5, -100)
@@ -11,7 +14,6 @@ mainFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 mainFrame.BorderSizePixel = 0
 mainFrame.Parent = screenGui
 
--- 🏷️ Title
 local title = Instance.new("TextLabel")
 title.Size = UDim2.new(1, -35, 0, 30)
 title.Position = UDim2.new(0, 10, 0, 5)
@@ -23,7 +25,6 @@ title.TextSize = 20
 title.TextXAlignment = Enum.TextXAlignment.Left
 title.Parent = mainFrame
 
--- ❌ Close button
 local closeButton = Instance.new("TextButton")
 closeButton.Size = UDim2.new(0, 25, 0, 25)
 closeButton.Position = UDim2.new(1, -30, 0, 5)
@@ -34,7 +35,6 @@ closeButton.BackgroundColor3 = Color3.fromRGB(170, 0, 0)
 closeButton.TextColor3 = Color3.new(1,1,1)
 closeButton.Parent = mainFrame
 
--- 📝 Input
 local inputBox = Instance.new("TextBox")
 inputBox.Size = UDim2.new(0.9, 0, 0, 40)
 inputBox.Position = UDim2.new(0.05, 0, 0, 50)
@@ -47,7 +47,6 @@ inputBox.TextScaled = true
 inputBox.ClearTextOnFocus = false
 inputBox.Parent = mainFrame
 
--- 🍎 Meva Button
 local fruitButton = Instance.new("TextButton")
 fruitButton.Size = UDim2.new(0.4, 0, 0, 40)
 fruitButton.Position = UDim2.new(0.05, 0, 0, 110)
@@ -58,7 +57,6 @@ fruitButton.Font = Enum.Font.GothamBold
 fruitButton.TextScaled = true
 fruitButton.Parent = mainFrame
 
--- 🐄 Hayvon Button
 local animalButton = Instance.new("TextButton")
 animalButton.Size = UDim2.new(0.4, 0, 0, 40)
 animalButton.Position = UDim2.new(0.55, 0, 0, 110)
@@ -69,20 +67,28 @@ animalButton.Font = Enum.Font.GothamBold
 animalButton.TextScaled = true
 animalButton.Parent = mainFrame
 
--- ❌ Close button function
+-- ❌ Yopish
 closeButton.MouseButton1Click:Connect(function()
 	screenGui:Destroy()
 end)
 
--- 🔘 Tugmalar funksiyasi (print orqali sinov)
+-- 🧠 Spawn funksiyasi
+local function spawnItem(itemName)
+	local template = ReplicatedStorage:FindFirstChild(itemName)
+	if template then
+		local clone = template:Clone()
+		clone.Parent = workspace
+		clone:SetPrimaryPartCFrame(player.Character:GetPrimaryPartCFrame() + Vector3.new(0, 5, 0))
+	else
+		warn("❌ Topilmadi: " .. itemName)
+	end
+end
+
+-- Tugmalar
 fruitButton.MouseButton1Click:Connect(function()
-	local itemName = inputBox.Text
-	print("🍎 Meva spawn: ".. itemName)
-	-- Bu yerda FireServer yoki boshqa kod yoziladi
+	spawnItem(inputBox.Text)
 end)
 
 animalButton.MouseButton1Click:Connect(function()
-	local itemName = inputBox.Text
-	print("🐄 Hayvon spawn: ".. itemName)
-	-- Bu yerda FireServer yoki boshqa kod yoziladi
+	spawnItem(inputBox.Text)
 end)
