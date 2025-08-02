@@ -1,40 +1,60 @@
--- [ Grow a Garden - Dynamic Spawn UI ]
 local player = game.Players.LocalPlayer
 local screenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-screenGui.Name = "SpawnUI"
+screenGui.Name = "ItemSpawnUI"
+screenGui.ResetOnSpawn = false
 
--- TextBox: Meva yoki hayvon nomini kiritish
-local input = Instance.new("TextBox")
-input.Size = UDim2.new(0, 200, 0, 50)
-input.Position = UDim2.new(0.5, -100, 0.5, -80)
-input.PlaceholderText = "Meva yoki hayvon nomi yoz..."
-input.Text = ""
-input.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-input.TextColor3 = Color3.fromRGB(0, 0, 0)
-input.TextScaled = true
-input.Parent = screenGui
+-- 🎁 Asosiy oyna (modal frame)
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(0, 300, 0, 200)
+mainFrame.Position = UDim2.new(0.5, -150, 0.5, -100)
+mainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+mainFrame.BorderSizePixel = 0
+mainFrame.Parent = screenGui
 
--- Tugma: Yuborish
-local button = Instance.new("TextButton")
-button.Size = UDim2.new(0, 200, 0, 50)
-button.Position = UDim2.new(0.5, -100, 0.5, -20)
-button.Text = "🚀 Spawn Qil"
-button.BackgroundColor3 = Color3.fromRGB(100, 200, 100)
-button.TextScaled = true
-button.Parent = screenGui
+-- 📝 TextBox: Narsa nomini yozish
+local inputBox = Instance.new("TextBox")
+inputBox.Size = UDim2.new(0, 250, 0, 40)
+inputBox.Position = UDim2.new(0.5, -125, 0, 40)
+inputBox.PlaceholderText = "Narsa nomi: masalan 'Cow' yoki 'Pumpkin'"
+inputBox.Text = ""
+inputBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+inputBox.TextColor3 = Color3.fromRGB(0, 0, 0)
+inputBox.TextScaled = true
+inputBox.Parent = mainFrame
 
--- Fireserver ulanishi
-button.MouseButton1Click:Connect(function()
-    local itemName = input.Text
+-- 🚀 Spawn tugmasi
+local spawnButton = Instance.new("TextButton")
+spawnButton.Size = UDim2.new(0, 200, 0, 40)
+spawnButton.Position = UDim2.new(0.5, -100, 0, 100)
+spawnButton.Text = "🚀 Spawn Qil"
+spawnButton.BackgroundColor3 = Color3.fromRGB(0, 170, 80)
+spawnButton.TextScaled = true
+spawnButton.Parent = mainFrame
+
+-- ❌ Yopish tugmasi
+local closeButton = Instance.new("TextButton")
+closeButton.Size = UDim2.new(0, 30, 0, 30)
+closeButton.Position = UDim2.new(1, -35, 0, 5)
+closeButton.Text = "X"
+closeButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+closeButton.TextScaled = true
+closeButton.Parent = mainFrame
+
+-- 🔄 Tugmalar funksiyasi
+spawnButton.MouseButton1Click:Connect(function()
+    local itemName = inputBox.Text
     if itemName and itemName ~= "" then
-        local remote = game:GetService("ReplicatedStorage"):FindFirstChild("SpawnFruit") -- yoki o‘zgartirilgan nom
+        local remote = game:GetService("ReplicatedStorage"):FindFirstChild("SpawnFruit") -- Remote nomi shu bo‘lsa
         if remote then
             remote:FireServer(itemName)
-            print("Yuborildi: ", itemName)
         else
-            warn("❌ RemoteEvent topilmadi.")
+            warn("RemoteEvent topilmadi!")
         end
     else
-        warn("❗ Narsa nomini kiriting.")
+        warn("Narsa nomi kiritilmagan!")
     end
+end)
+
+closeButton.MouseButton1Click:Connect(function()
+    screenGui:Destroy()
 end)
