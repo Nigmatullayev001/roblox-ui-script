@@ -2,7 +2,11 @@ local player = game.Players.LocalPlayer
 local screenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 screenGui.Name = "ItemSpawnUI"
 screenGui.ResetOnSpawn = false
-warn("ReplicatedStorage children:", game:GetService("ReplicatedStorage"):GetChildren())
+
+for _, child in ipairs(game:GetService("ReplicatedStorage"):GetChildren()) do
+    print("🔍 Found in ReplicatedStorage:", child.Name, child.ClassName)
+end
+
 
 -- 🎁 Asosiy oyna (modal frame)
 local mainFrame = Instance.new("Frame")
