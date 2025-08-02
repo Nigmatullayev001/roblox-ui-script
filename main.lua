@@ -44,17 +44,18 @@ closeButton.Parent = mainFrame
 spawnButton.MouseButton1Click:Connect(function()
     local itemName = inputBox.Text
     if itemName and itemName ~= "" then
-        local remote = game:GetService("ReplicatedStorage"):FindFirstChild("SpawnFruit") -- Remote nomi shu bo‘lsa
+        local remote = game:GetService("ReplicatedStorage"):FindFirstChild("SpawnFruit")
         if remote then
-            remote:FireServer("Sugar Apple")  -- shunday bo‘lishi mumkin
-
+            remote:FireServer(itemName)
+            messageLabel.Text = "✅ '" .. itemName .. "' yuborildi!"
         else
-            warn("RemoteEvent topilmadi!")
+            messageLabel.Text = "❌ RemoteEvent topilmadi!"
         end
     else
-        warn("Narsa nomi kiritilmagan!")
+        messageLabel.Text = "⚠️ Narsa nomi kiritilmagan!"
     end
 end)
+
 
 closeButton.MouseButton1Click:Connect(function()
     screenGui:Destroy()
