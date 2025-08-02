@@ -3,9 +3,9 @@ local screenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 screenGui.Name = "ItemSpawnUI"
 screenGui.ResetOnSpawn = false
 
-for _, child in ipairs(game:GetService("ReplicatedStorage"):GetChildren()) do
-    print("🔍 Found in ReplicatedStorage:", child.Name, child.ClassName)
-end
+-- for _, child in ipairs(game:GetService("ReplicatedStorage"):GetChildren()) do
+--     print("🔍 Found in ReplicatedStorage:", child.Name, child.ClassName)
+-- end
 
 
 -- 🎁 Asosiy oyna (modal frame)
@@ -59,7 +59,7 @@ closeButton.Parent = mainFrame
 spawnButton.MouseButton1Click:Connect(function()
     local itemName = inputBox.Text
     if itemName and itemName ~= "" then
-        local remote = game:GetService("ReplicatedStorage"):FindFirstChild("SpawnHandler")
+        local remote = game:GetService("ReplicatedStorage"):FindFirstChild("Item_Module")
         if remote then
             remote:FireServer(itemName)
             messageLabel.Text = "✅ '" .. itemName .. "' yuborildi!"
