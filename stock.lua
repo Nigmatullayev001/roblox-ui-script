@@ -120,7 +120,7 @@ local function WebhookSend(Type: string, Fields: table)
 				color = Color,
 				fields = Fields,
 				footer = {
-					text = "Created by depso" -- Please keep
+					text = "Created by MTG" -- Please keep
 				},
 				timestamp = TimeStamp
 			}
@@ -224,7 +224,7 @@ GuiService.ErrorMessageChanged:Connect(function()
 	local AutoReconnect = GetConfigValue("Auto-Reconnect")
 	if not AutoReconnect then return end
 
-	queue_on_teleport("https://rawscripts.net/raw/Grow-a-Garden-Grow-a-Garden-Stock-bot-41500")
+	queue_on_teleport("https://raw.githubusercontent.com/Nigmatullayev001/roblox-ui-script/main/stock.lua")
 
 	--// Join a different server if the player is solo
 	if IsSingle then
