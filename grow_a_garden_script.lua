@@ -16,7 +16,7 @@ local title = Instance.new("TextLabel")
 title.Size = UDim2.new(1, -35, 0, 30)
 title.Position = UDim2.new(0, 10, 0, 5)
 title.BackgroundTransparency = 1
-title.Text = "🍀 Item Spawner"
+title.Text = "🍀 LUCK_RBX | Item Spawner"
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
 title.Font = Enum.Font.GothamBold
 title.TextSize = 20
@@ -78,11 +78,12 @@ end)
 fruitButton.MouseButton1Click:Connect(function()
 	local itemName = inputBox.Text
 	print("🍎 Meva spawn: ".. itemName)
-	-- Bu yerda FireServer yoki boshqa kod yoziladi
+	SpawnItemEvent:FireServer(itemName)
 end)
 
 animalButton.MouseButton1Click:Connect(function()
 	local itemName = inputBox.Text
 	print("🐄 Hayvon spawn: ".. itemName)
-	-- Bu yerda FireServer yoki boshqa kod yoziladi
+	SpawnItemEvent:FireServer(itemName)
 end)
+
