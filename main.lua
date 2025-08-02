@@ -17,7 +17,7 @@ button.MouseButton1Click:Connect(function()
     -- Bu joyda RemoteEvent nomini tekshirib ol
     local remote = game:GetService("ReplicatedStorage"):FindFirstChild("SpawnFruit") -- yoki "RemoteEvent"
     if remote then
-        remote:FireServer("Apple") -- O'rniga istalgan item nomini yoz: Apple, Raccoon, Tomato, Cow va h.k.
+        remote:FireServer("SugarApplleSeed") -- O'rniga istalgan item nomini yoz: Apple, Raccoon, Tomato, Cow va h.k.
     else
         warn("RemoteEvent topilmadi!")
     end
