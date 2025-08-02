@@ -20,7 +20,7 @@ mainFrame.Parent = screenGui
 local inputBox = Instance.new("TextBox")
 inputBox.Size = UDim2.new(0, 250, 0, 40)
 inputBox.Position = UDim2.new(0.5, -125, 0, 40)
-inputBox.PlaceholderText = "Narsa nomi: masalan 'Cow' yoki 'Pumpkin'"
+inputBox.PlaceholderText = "Item name: e.g. 'SugarApple' or 'Apple'"
 inputBox.Text = ""
 inputBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 inputBox.TextColor3 = Color3.fromRGB(0, 0, 0)
@@ -31,7 +31,7 @@ inputBox.Parent = mainFrame
 local spawnButton = Instance.new("TextButton")
 spawnButton.Size = UDim2.new(0, 200, 0, 40)
 spawnButton.Position = UDim2.new(0.5, -100, 0, 100)
-spawnButton.Text = "🚀 Spawn Qil"
+spawnButton.Text = "🚀 Spawn"
 spawnButton.BackgroundColor3 = Color3.fromRGB(0, 170, 80)
 spawnButton.TextScaled = true
 spawnButton.Parent = mainFrame
@@ -59,17 +59,17 @@ closeButton.Parent = mainFrame
 spawnButton.MouseButton1Click:Connect(function()
     local itemName = inputBox.Text
     if itemName and itemName ~= "" then
-        local remote = game:GetService("ReplicatedStorage"):FindFirstChild("Item_Module")
+        local remote = game:GetService("ReplicatedStorage"):FindFirstChild("SpawnHandler")
         if remote then
             remote:FireServer(itemName)
-            messageLabel.Text = "✅ '" .. itemName .. "' yuborildi!"
+            messageLabel.Text = "✅ '" .. itemName .. "' sent!"
         else
-            messageLabel.Text = "❌ RemoteEvent topilmadi!"
+            messageLabel.Text = "❌ RemoteEvent not found!"
             
 
         end
     else
-        messageLabel.Text = "⚠️ Narsa nomi kiritilmagan!"
+        messageLabel.Text = "⚠️ Item name not entered!"
     end
 end)
 
