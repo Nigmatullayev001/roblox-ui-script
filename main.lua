@@ -61,20 +61,16 @@ spawnButton.MouseButton1Click:Connect(function()
     if itemName and itemName ~= "" then
         local remote = game:GetService("ReplicatedStorage"):FindFirstChild("SpawnHandler")
         if remote then
-            if remote:FireServer(itemName) then
-                remote:FireServer(itemName)
-                messageLabel.Text = "✅ '" .. itemName .. "' sent!"
-            else
-                messageLabel.Text = "❌ "itemName" not found!"
+            remote:FireServer(itemName) -- ❗ FireServer hech qanday qiymat qaytarmaydi
+            messageLabel.Text = "✅ '" .. itemName .. "' sent!"
         else
             messageLabel.Text = "❌ RemoteEvent not found!"
-            
-
         end
     else
         messageLabel.Text = "⚠️ Item name not entered!"
     end
 end)
+
 
 closeButton.MouseButton1Click:Connect(function()
     screenGui:Destroy()
