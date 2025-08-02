@@ -5,8 +5,8 @@ screenGui.ResetOnSpawn = false
 
 -- 🎁 Asosiy oyna (modal frame)
 local mainFrame = Instance.new("Frame")
-mainFrame.Size = UDim2.new(0, 300, 0, 200)
-mainFrame.Position = UDim2.new(0.5, -150, 0.5, -100)
+mainFrame.Size = UDim2.new(0, 300, 0, 230)
+mainFrame.Position = UDim2.new(0.5, -150, 0.5, -115)
 mainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 mainFrame.BorderSizePixel = 0
 mainFrame.Parent = screenGui
@@ -30,6 +30,16 @@ spawnButton.Text = "🚀 Spawn Qil"
 spawnButton.BackgroundColor3 = Color3.fromRGB(0, 170, 80)
 spawnButton.TextScaled = true
 spawnButton.Parent = mainFrame
+
+-- ✅ Xabar label
+local messageLabel = Instance.new("TextLabel")
+messageLabel.Size = UDim2.new(0, 250, 0, 30)
+messageLabel.Position = UDim2.new(0.5, -125, 0, 150)
+messageLabel.BackgroundTransparency = 1
+messageLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+messageLabel.TextScaled = true
+messageLabel.Text = ""
+messageLabel.Parent = mainFrame
 
 -- ❌ Yopish tugmasi
 local closeButton = Instance.new("TextButton")
@@ -55,7 +65,6 @@ spawnButton.MouseButton1Click:Connect(function()
         messageLabel.Text = "⚠️ Narsa nomi kiritilmagan!"
     end
 end)
-
 
 closeButton.MouseButton1Click:Connect(function()
     screenGui:Destroy()
