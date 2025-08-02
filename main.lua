@@ -46,7 +46,8 @@ spawnButton.MouseButton1Click:Connect(function()
     if itemName and itemName ~= "" then
         local remote = game:GetService("ReplicatedStorage"):FindFirstChild("SpawnFruit") -- Remote nomi shu bo‘lsa
         if remote then
-            remote:FireServer(itemName)
+            remote:FireServer("Sugar Apple")  -- shunday bo‘lishi mumkin
+
         else
             warn("RemoteEvent topilmadi!")
         end
