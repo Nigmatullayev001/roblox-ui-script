@@ -17,11 +17,8 @@ end
 local humanoid = getHumanoid()
 
 -- GUI yaratish
-local screenGui = Instance.new("ScreenGui")
+local screenGui = Instance.new("ScreenGui", PlayerGui)
 screenGui.Name = "RunHealthGUI"
-screenGui.ResetOnSpawn = false -- GUI yo‘qolmasligi uchun
-screenGui.Parent = PlayerGui
-
 
 -- Panel (Frame)
 local frame = Instance.new("Frame", screenGui)
@@ -102,25 +99,22 @@ addHealthBtn.MouseButton1Click:Connect(function()
 	end
 end)
 
--- Revive
--- Revive Button (Self Revive tugmasi)
+-- Revive Button
 reviveBtn.MouseButton1Click:Connect(function()
 	local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 	local hum = char:FindFirstChild("Humanoid")
 
 	if hum then
 		if hum.Health <= 0 then
-			-- Characterni qayta tiklash (Reload)
-			char:BreakJoints() -- o‘ldiramiz
+			char:BreakJoints()
 			wait(0.5)
-			LocalPlayer:LoadCharacter() -- yangidan tiriltiramiz
+			LocalPlayer:LoadCharacter()
 		else
-			-- Agar hali tirik bo‘lsa, shunchaki max healthga tenglashtiramiz
-			hum.Health = hum.MaxHealth
+			hum.MaxHealth = 1000
+			hum.Health = 1000
 		end
 	end
 end)
-
 
 -- Close GUI
 closeBtn.MouseButton1Click:Connect(function()
@@ -130,5 +124,7 @@ end)
 -- Respawn hodisasi
 LocalPlayer.CharacterAdded:Connect(function(char)
 	humanoid = char:WaitForChild("Humanoid")
+	humanoid.MaxHealth = 1000
+	humanoid.Health = 1000
 	humanoid.WalkSpeed = normalSpeed
 end)
