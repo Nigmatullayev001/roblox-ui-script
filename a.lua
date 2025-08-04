@@ -22,7 +22,7 @@ frame.BorderSizePixel = 2
 local moneyBtn = Instance.new("TextButton", frame)
 moneyBtn.Size = UDim2.new(1, -20, 1, -20)
 moneyBtn.Position = UDim2.new(0, 10, 0, 10)
-moneyBtn.Text = "➕ Money +100"
+moneyBtn.Text = "➕ Money +1000"
 moneyBtn.BackgroundColor3 = Color3.fromRGB(255, 200, 50)
 moneyBtn.TextColor3 = Color3.new(1, 1, 1)
 moneyBtn.TextScaled = true
@@ -31,6 +31,6 @@ moneyBtn.TextScaled = true
 moneyBtn.MouseButton1Click:Connect(function()
 	local money = getMoneyStat()
 	if money then
-		money.Value += 100
+		money.Value += 1000
 	end
 end)
