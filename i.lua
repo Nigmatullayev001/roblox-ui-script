@@ -1,4 +1,4 @@
--- RunSpeed + Health Tools + GUI
+v-- RunSpeed + Health Tools + GUI
 local Players = game:GetService("Players")
 local UIS = game:GetService("UserInputService")
 local LocalPlayer = Players.LocalPlayer
@@ -7,7 +7,11 @@ local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 -- Humanoid olish
 local function getHumanoid()
 	local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-	return char:WaitForChild("Humanoid")
+	local hum = char:WaitForChild("Humanoid")
+	hum.MaxHealth = 1000 -- MaxHealth ni 1000 qilamiz
+	wait() -- o‘zgarish kuchga kirishi uchun kutamiz
+	hum.Health = 1000 -- To‘liq to‘ldirib qo‘yamiz
+	return hum
 end
 
 local humanoid = getHumanoid()
@@ -95,11 +99,20 @@ addHealthBtn.MouseButton1Click:Connect(function()
 	end
 end)
 
--- Revive
+-- Revive Button
 reviveBtn.MouseButton1Click:Connect(function()
-	humanoid = getHumanoid()
-	if humanoid and humanoid.Health <= 0 then
-		humanoid.Health = humanoid.MaxHealth
+	local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+	local hum = char:FindFirstChild("Humanoid")
+
+	if hum then
+		if hum.Health <= 0 then
+			char:BreakJoints()
+			wait(0.5)
+			LocalPlayer:LoadCharacter()
+		else
+			hum.MaxHealth = 1000
+			hum.Health = 1000
+		end
 	end
 end)
 
@@ -111,5 +124,7 @@ end)
 -- Respawn hodisasi
 LocalPlayer.CharacterAdded:Connect(function(char)
 	humanoid = char:WaitForChild("Humanoid")
+	humanoid.MaxHealth = 1000
+	humanoid.Health = 1000
 	humanoid.WalkSpeed = normalSpeed
 end)
