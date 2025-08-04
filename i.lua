@@ -1,17 +1,35 @@
--- Safe Speed toggle script
-local UIS = game:GetService("UserInputService")
+-- Speed GUI (Button bilan)
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
-local Humanoid = LocalPlayer.Character:WaitForChild("Humanoid")
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
-local NormalSpeed = 16 -- default Roblox speed
-local FastSpeed = 25 -- pastroq boost (anticheatdan o‘tishi mumkin)
-local Speeding = false
+-- GUI yaratish
+local ScreenGui = Instance.new("ScreenGui", PlayerGui)
+ScreenGui.Name = "SpeedGui"
 
-UIS.InputBegan:Connect(function(input, gpe)
-	if gpe then return end
-	if input.KeyCode == Enum.KeyCode.LeftShift then
-		Speeding = not Speeding
-		Humanoid.WalkSpeed = Speeding and FastSpeed or NormalSpeed
+local Button = Instance.new("TextButton", ScreenGui)
+Button.Size = UDim2.new(0, 120, 0, 40)
+Button.Position = UDim2.new(0, 10, 0, 10)
+Button.Text = "Speed: OFF"
+Button.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+Button.TextColor3 = Color3.fromRGB(255, 255, 255)
+Button.BorderSizePixel = 2
+Button.TextScaled = true
+
+-- Speed logika
+local speedOn = false
+local normalSpeed = 16
+local fastSpeed = 25
+
+local function toggleSpeed()
+	local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+	local humanoid = character:FindFirstChildOfClass("Humanoid")
+
+	if humanoid then
+		speedOn = not speedOn
+		humanoid.WalkSpeed = speedOn and fastSpeed or normalSpeed
+		Button.Text = speedOn and "Speed: ON" or "Speed: OFF"
 	end
-end)
+end
+
+Button.MouseButton1Click:Connect(toggleSpeed)
