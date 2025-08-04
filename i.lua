@@ -1,3 +1,6 @@
--- Speed kod (namuna)
-local Hum = game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
-Hum.WalkSpeed = 60  -- yurgan tezlikni oshirish
+-- Revive / Respawn kod
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+-- Character respawn
+player:LoadCharacter()
