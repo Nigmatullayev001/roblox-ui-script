@@ -1,6 +1,7 @@
--- RunSpeed + GUI + Trail Effect
+-- RunSpeed + Trail + Infinite Health
 local Players = game:GetService("Players")
 local UIS = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
 local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
@@ -26,9 +27,7 @@ local trail = nil
 
 -- Trail yasash funksiyasi
 local function createTrail(character)
-	if trail then
-		trail:Destroy()
-	end
+	if trail then trail:Destroy() end
 
 	local attachment1 = Instance.new("Attachment", character:WaitForChild("LeftFoot"))
 	local attachment2 = Instance.new("Attachment", character:WaitForChild("RightFoot"))
@@ -43,11 +42,22 @@ local function createTrail(character)
 	trail.Transparency = NumberSequence.new(0.2, 1)
 end
 
--- Humanoid olish
+-- Cheksiz jon (God Mode) funksiyasi
+local function startGodMode(h)
+	RunService.Heartbeat:Connect(function()
+		if h and h.Health < h.MaxHealth then
+			h.Health = h.MaxHealth
+		end
+	end)
+end
+
+-- Humanoid olish + tayyorlash
 local function getHumanoid()
 	local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+	local h = char:WaitForChild("Humanoid")
 	createTrail(char)
-	return char:WaitForChild("Humanoid")
+	startGodMode(h)
+	return h
 end
 
 humanoid = getHumanoid()
@@ -69,7 +79,7 @@ UIS.InputEnded:Connect(function(input, gpe)
 	end
 end)
 
--- Button orqali yoqib/o‘chirish
+-- GUI Button orqali yoqish/o‘chirish
 Button.MouseButton1Click:Connect(function()
 	enabled = not enabled
 	Button.Text = enabled and "Run: ENABLED" or "Run: DISABLED"
@@ -79,7 +89,7 @@ Button.MouseButton1Click:Connect(function()
 	end
 end)
 
--- Respawn bo‘lsa ham davom etadi
+-- Respawn bo‘lsa tiklanadi
 LocalPlayer.CharacterAdded:Connect(function()
 	humanoid = getHumanoid()
 	humanoid.WalkSpeed = normalSpeed
