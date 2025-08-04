@@ -1,35 +1,86 @@
--- Speed GUI (Button bilan)
+-- RunSpeed + GUI + Trail Effect
 local Players = game:GetService("Players")
+local UIS = game:GetService("UserInputService")
 local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
 -- GUI yaratish
 local ScreenGui = Instance.new("ScreenGui", PlayerGui)
-ScreenGui.Name = "SpeedGui"
+ScreenGui.Name = "RunTrailGui"
 
 local Button = Instance.new("TextButton", ScreenGui)
-Button.Size = UDim2.new(0, 120, 0, 40)
-Button.Position = UDim2.new(0, 10, 0, 10)
-Button.Text = "Speed: OFF"
-Button.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+Button.Size = UDim2.new(0, 140, 0, 40)
+Button.Position = UDim2.new(0, 10, 0, 60)
+Button.Text = "Run: ENABLED"
+Button.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 Button.TextColor3 = Color3.fromRGB(255, 255, 255)
 Button.BorderSizePixel = 2
 Button.TextScaled = true
 
--- Speed logika
-local speedOn = false
+-- Sozlamalar
+local enabled = true
 local normalSpeed = 16
-local fastSpeed = 500
+local runSpeed = 30
+local humanoid = nil
+local trail = nil
 
-local function toggleSpeed()
-	local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-	local humanoid = character:FindFirstChildOfClass("Humanoid")
-
-	if humanoid then
-		speedOn = not speedOn
-		humanoid.WalkSpeed = speedOn and fastSpeed or normalSpeed
-		Button.Text = speedOn and "Speed: ON" or "Speed: OFF"
+-- Trail yasash funksiyasi
+local function createTrail(character)
+	if trail then
+		trail:Destroy()
 	end
+
+	local attachment1 = Instance.new("Attachment", character:WaitForChild("LeftFoot"))
+	local attachment2 = Instance.new("Attachment", character:WaitForChild("RightFoot"))
+
+	trail = Instance.new("Trail", character)
+	trail.Attachment0 = attachment1
+	trail.Attachment1 = attachment2
+	trail.Lifetime = 0.2
+	trail.MinLength = 0.1
+	trail.Enabled = false
+	trail.Color = ColorSequence.new(Color3.fromRGB(255, 255, 255))
+	trail.Transparency = NumberSequence.new(0.2, 1)
 end
 
-Button.MouseButton1Click:Connect(toggleSpeed)
+-- Humanoid olish
+local function getHumanoid()
+	local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+	createTrail(char)
+	return char:WaitForChild("Humanoid")
+end
+
+humanoid = getHumanoid()
+
+-- Shift bosilganda speed + trail
+UIS.InputBegan:Connect(function(input, gpe)
+	if gpe or not enabled then return end
+	if input.KeyCode == Enum.KeyCode.LeftShift and humanoid then
+		humanoid.WalkSpeed = runSpeed
+		if trail then trail.Enabled = true end
+	end
+end)
+
+UIS.InputEnded:Connect(function(input, gpe)
+	if gpe or not enabled then return end
+	if input.KeyCode == Enum.KeyCode.LeftShift and humanoid then
+		humanoid.WalkSpeed = normalSpeed
+		if trail then trail.Enabled = false end
+	end
+end)
+
+-- Button orqali yoqib/o‘chirish
+Button.MouseButton1Click:Connect(function()
+	enabled = not enabled
+	Button.Text = enabled and "Run: ENABLED" or "Run: DISABLED"
+	if humanoid then
+		humanoid.WalkSpeed = normalSpeed
+		if trail then trail.Enabled = false end
+	end
+end)
+
+-- Respawn bo‘lsa ham davom etadi
+LocalPlayer.CharacterAdded:Connect(function()
+	humanoid = getHumanoid()
+	humanoid.WalkSpeed = normalSpeed
+end)
