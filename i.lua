@@ -21,7 +21,7 @@ Button.TextScaled = true
 -- Sozlamalar
 local enabled = true
 local normalSpeed = 16
-local runSpeed = 30
+local runSpeed = 300
 local humanoid = nil
 local trail = nil
 
