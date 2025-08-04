@@ -1,13 +1,12 @@
--- RunSpeed + Trail + Infinite Health
+-- RunSpeed + GUI Toggle (Shift + Button)
 local Players = game:GetService("Players")
 local UIS = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
 local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
 -- GUI yaratish
 local ScreenGui = Instance.new("ScreenGui", PlayerGui)
-ScreenGui.Name = "RunTrailGui"
+ScreenGui.Name = "RunSpeedGui"
 
 local Button = Instance.new("TextButton", ScreenGui)
 Button.Size = UDim2.new(0, 140, 0, 40)
@@ -18,56 +17,25 @@ Button.TextColor3 = Color3.fromRGB(255, 255, 255)
 Button.BorderSizePixel = 2
 Button.TextScaled = true
 
--- Sozlamalar
+-- Tezlik sozlamalari
 local enabled = true
-local normalSpeed = 16
+local normalSpeed = 160
 local runSpeed = 300
 local humanoid = nil
-local trail = nil
 
--- Trail yasash funksiyasi
-local function createTrail(character)
-	if trail then trail:Destroy() end
-
-	local attachment1 = Instance.new("Attachment", character:WaitForChild("LeftFoot"))
-	local attachment2 = Instance.new("Attachment", character:WaitForChild("RightFoot"))
-
-	trail = Instance.new("Trail", character)
-	trail.Attachment0 = attachment1
-	trail.Attachment1 = attachment2
-	trail.Lifetime = 0.2
-	trail.MinLength = 0.1
-	trail.Enabled = false
-	trail.Color = ColorSequence.new(Color3.fromRGB(255, 255, 255))
-	trail.Transparency = NumberSequence.new(0.2, 1)
-end
-
--- Cheksiz jon (God Mode) funksiyasi
-local function startGodMode(h)
-	RunService.Heartbeat:Connect(function()
-		if h and h.Health < h.MaxHealth then
-			h.Health = h.MaxHealth
-		end
-	end)
-end
-
--- Humanoid olish + tayyorlash
+-- Karakter tayyor bo'lishini kut
 local function getHumanoid()
 	local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-	local h = char:WaitForChild("Humanoid")
-	createTrail(char)
-	startGodMode(h)
-	return h
+	return char:WaitForChild("Humanoid")
 end
 
 humanoid = getHumanoid()
 
--- Shift bosilganda speed + trail
+-- Shift bosilganda speed o'zgaradi
 UIS.InputBegan:Connect(function(input, gpe)
 	if gpe or not enabled then return end
 	if input.KeyCode == Enum.KeyCode.LeftShift and humanoid then
 		humanoid.WalkSpeed = runSpeed
-		if trail then trail.Enabled = true end
 	end
 end)
 
@@ -75,21 +43,19 @@ UIS.InputEnded:Connect(function(input, gpe)
 	if gpe or not enabled then return end
 	if input.KeyCode == Enum.KeyCode.LeftShift and humanoid then
 		humanoid.WalkSpeed = normalSpeed
-		if trail then trail.Enabled = false end
 	end
 end)
 
--- GUI Button orqali yoqish/o‘chirish
+-- Button orqali yoqib/o‘chirish
 Button.MouseButton1Click:Connect(function()
 	enabled = not enabled
 	Button.Text = enabled and "Run: ENABLED" or "Run: DISABLED"
 	if humanoid then
 		humanoid.WalkSpeed = normalSpeed
-		if trail then trail.Enabled = false end
 	end
 end)
 
--- Respawn bo‘lsa tiklanadi
+-- Karakter respawn bo‘lsa ham ishlashi uchun
 LocalPlayer.CharacterAdded:Connect(function()
 	humanoid = getHumanoid()
 	humanoid.WalkSpeed = normalSpeed
