@@ -19,7 +19,7 @@ Button.TextScaled = true
 -- Speed logika
 local speedOn = false
 local normalSpeed = 16
-local fastSpeed = 25
+local fastSpeed = 50
 
 local function toggleSpeed()
 	local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
