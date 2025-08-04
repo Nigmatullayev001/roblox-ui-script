@@ -17,8 +17,11 @@ end
 local humanoid = getHumanoid()
 
 -- GUI yaratish
-local screenGui = Instance.new("ScreenGui", PlayerGui)
+local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "RunHealthGUI"
+screenGui.ResetOnSpawn = false -- GUI yo‘qolmasligi uchun
+screenGui.Parent = PlayerGui
+
 
 -- Panel (Frame)
 local frame = Instance.new("Frame", screenGui)
