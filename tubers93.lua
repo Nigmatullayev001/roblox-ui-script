@@ -5,7 +5,8 @@ local player = game.Players.LocalPlayer
 local moneyNames = {"Money", "Cash", "Coins", "Gold", "Bucks", "Points", "Credits", "Diamonds", "Tokens"}
 
 -- GUI elementlari
-local screenGui = script.Parent
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = player:WaitForChild("PlayerGui")
 
 local moneyLabel = Instance.new("TextLabel")
 moneyLabel.Size = UDim2.new(0, 300, 0, 50)
@@ -27,6 +28,7 @@ addButton.Parent = screenGui
 local closeButton = Instance.new("TextButton")
 closeButton.Size = UDim2.new(0, 50, 0, 50)
 closeButton.Position = UDim2.new(1, -60, 0, 10)
+closeButton.AnchorPoint = Vector2.new(0, 0)
 closeButton.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
 closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 closeButton.TextScaled = true
@@ -63,5 +65,6 @@ end)
 
 -- Chiqish tugmasi
 closeButton.MouseButton1Click:Connect(function()
-    screenGui:Destroy()
+    screenGui.Enabled = false
 end)
+
