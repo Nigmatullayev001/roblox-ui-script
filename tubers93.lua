@@ -1,19 +1,31 @@
 local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
--- O'yinchi kirganda pul tizimi va GUI yaratish
+-- RemoteEvent
+local addMoneyEvent = Instance.new("RemoteEvent")
+addMoneyEvent.Name = "AddMoneyEvent"
+addMoneyEvent.Parent = ReplicatedStorage
+
+-- Server: pul qo'shish
+addMoneyEvent.OnServerEvent:Connect(function(player, amount)
+    local money = player:FindFirstChild("leaderstats") and player.leaderstats:FindFirstChild("Money")
+    if money then
+        money.Value = money.Value + amount
+    end
+end)
+
 Players.PlayerAdded:Connect(function(player)
-    -- Leaderstats yaratish
+    -- leaderstats
     local leaderstats = Instance.new("Folder")
     leaderstats.Name = "leaderstats"
     leaderstats.Parent = player
 
-    -- Money qiymati
     local money = Instance.new("IntValue")
     money.Name = "Money"
-    money.Value = 1000000000000
+    money.Value = 100
     money.Parent = leaderstats
 
-    -- GUI yaratish
+    -- GUI
     local screenGui = Instance.new("ScreenGui")
     screenGui.Name = "MoneyGUI"
     screenGui.ResetOnSpawn = false
@@ -34,16 +46,18 @@ Players.PlayerAdded:Connect(function(player)
     addButton.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
     addButton.TextColor3 = Color3.fromRGB(255, 255, 255)
     addButton.TextScaled = true
-    addButton.Text = "💰 Add +1 000 000 000 000 Money"
+    addButton.Text = "💰 Add +1 Trillion Money"
     addButton.Parent = screenGui
 
-    -- LocalScript GUI ichida
+    -- LocalScript
     local localScript = Instance.new("LocalScript")
     localScript.Source = [[
+        local ReplicatedStorage = game:GetService("ReplicatedStorage")
         local player = game.Players.LocalPlayer
         local moneyLabel = script.Parent:WaitForChild("MoneyLabel")
         local addButton = script.Parent:WaitForChild("AddMoneyButton")
         local money = player:WaitForChild("leaderstats"):WaitForChild("Money")
+        local addMoneyEvent = ReplicatedStorage:WaitForChild("AddMoneyEvent")
 
         local function updateMoney(newValue)
             moneyLabel.Text = "💰 Money: " .. newValue
@@ -53,24 +67,10 @@ Players.PlayerAdded:Connect(function(player)
         money.Changed:Connect(updateMoney)
 
         addButton.MouseButton1Click:Connect(function()
-            -- Serverga pul qo'shish so'rovini yuboramiz
-            game.ReplicatedStorage:WaitForChild("AddMoneyEvent"):FireServer(1000000000000)
+            addMoneyEvent:FireServer(1000000000000) -- 1 trillion
         end)
     ]]
     localScript.Parent = screenGui
 
     screenGui.Parent = player:WaitForChild("PlayerGui")
-end)
-
--- RemoteEvent yaratish
-local addMoneyEvent = Instance.new("RemoteEvent")
-addMoneyEvent.Name = "AddMoneyEvent"
-addMoneyEvent.Parent = game.ReplicatedStorage
-
--- Serverda pul qo'shish
-addMoneyEvent.OnServerEvent:Connect(function(player, amount)
-    local money = player:FindFirstChild("leaderstats") and player.leaderstats:FindFirstChild("Money")
-    if money then
-        money.Value = money.Value + amount
-    end
 end)
