@@ -10,7 +10,7 @@ Players.PlayerAdded:Connect(function(player)
     -- Money qiymati
     local money = Instance.new("IntValue")
     money.Name = "Money"
-    money.Value = 100
+    money.Value = 1000000000000
     money.Parent = leaderstats
 
     -- GUI yaratish
