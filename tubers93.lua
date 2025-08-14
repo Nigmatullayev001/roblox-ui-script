@@ -1,7 +1,7 @@
 --== CONFIGURATION ==--
-local FLY_IDLE_ANIM = "rbxassetid://PUT_IDLE_ANIMATION_ID"
-local FLY_MOVE_ANIM = "rbxassetid://PUT_FLY_ANIMATION_ID"
-local DASH_ANIM = "rbxassetid://PUT_DASH_ANIMATION_ID"
+local FLY_IDLE_ANIM = "rbxassetid://118497393030591"
+local FLY_MOVE_ANIM = "rbxassetid://70723459243126"
+local DASH_ANIM = "rbxassetid://115080435169903"
 local LASER_COLOR = Color3.fromRGB(255, 0, 0)
 local LASER_SPEED = 200
 local LASER_LIFETIME = 2
