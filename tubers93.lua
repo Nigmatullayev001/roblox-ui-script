@@ -1,70 +1,115 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local player = game.Players.LocalPlayer
+--== CONFIGURATION ==--
+local FLY_IDLE_ANIM = "rbxassetid://PUT_IDLE_ANIMATION_ID"
+local FLY_MOVE_ANIM = "rbxassetid://PUT_FLY_ANIMATION_ID"
+local DASH_ANIM = "rbxassetid://PUT_DASH_ANIMATION_ID"
+local LASER_COLOR = Color3.fromRGB(255, 0, 0)
+local LASER_SPEED = 200
+local LASER_LIFETIME = 2
 
--- Pul nomlari
-local moneyNames = {"Money", "Cash", "Coins", "Gold", "Bucks", "Points", "Credits", "Diamonds", "Tokens"}
+--== VARIABLES ==--
+local Players = game:GetService("Players")
+local UIS = game:GetService("UserInputService")
+local RS = game:GetService("RunService")
 
--- GUI elementlari
-local screenGui = Instance.new("ScreenGui")
-screenGui.Parent = player:WaitForChild("PlayerGui")
+local player = Players.LocalPlayer
+local char = player.Character or player.CharacterAdded:Wait()
+local hum = char:WaitForChild("Humanoid")
+local root = char:WaitForChild("HumanoidRootPart")
+local mouse = player:GetMouse()
 
-local moneyLabel = Instance.new("TextLabel")
-moneyLabel.Size = UDim2.new(0, 300, 0, 50)
-moneyLabel.Position = UDim2.new(0, 10, 0, 10)
-moneyLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-moneyLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-moneyLabel.TextScaled = true
-moneyLabel.Parent = screenGui
+local flying = false
+local laserOn = false
+local velocity = Instance.new("BodyVelocity")
+velocity.MaxForce = Vector3.new(1e5, 1e5, 1e5)
+velocity.Velocity = Vector3.zero
 
-local addButton = Instance.new("TextButton")
-addButton.Size = UDim2.new(0, 300, 0, 50)
-addButton.Position = UDim2.new(0, 10, 0, 70)
-addButton.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
-addButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-addButton.TextScaled = true
-addButton.Text = "💰 Add +1 Trillion to All"
-addButton.Parent = screenGui
-
-local closeButton = Instance.new("TextButton")
-closeButton.Size = UDim2.new(0, 50, 0, 50)
-closeButton.Position = UDim2.new(1, -60, 0, 10)
-closeButton.AnchorPoint = Vector2.new(0, 0)
-closeButton.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
-closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-closeButton.TextScaled = true
-closeButton.Text = "X"
-closeButton.Parent = screenGui
-
--- Pul qiymatlarini yangilash funksiyasi
-local function updateMoney()
-    local texts = {}
-    for _, name in ipairs(moneyNames) do
-        local stat = player:WaitForChild("leaderstats"):FindFirstChild(name)
-        if stat then
-            table.insert(texts, name .. ": " .. stat.Value)
-        end
-    end
-    moneyLabel.Text = "💰 " .. table.concat(texts, " | ")
+--== ANIMATION LOADER ==--
+local function loadAnim(id)
+	local anim = Instance.new("Animation")
+	anim.AnimationId = id
+	return hum:LoadAnimation(anim)
 end
 
--- Har bir stat o'zgarsa yangilash
-for _, name in ipairs(moneyNames) do
-    local stat = player:WaitForChild("leaderstats"):FindFirstChild(name)
-    if stat then
-        stat.Changed:Connect(updateMoney)
-    end
-end
+local flyIdle = loadAnim(FLY_IDLE_ANIM)
+local flyMove = loadAnim(FLY_MOVE_ANIM)
+local dashAnim = loadAnim(DASH_ANIM)
 
--- Boshlang'ich holatda yangilash
-updateMoney()
-
--- Tugma bosilganda serverga so'rov yuborish
-addButton.MouseButton1Click:Connect(function()
-    ReplicatedStorage:WaitForChild("AddMoneyEvent"):FireServer(1000000000000)
+--== FLY TOGGLE ==--
+UIS.InputBegan:Connect(function(input, gp)
+	if gp then return end
+	if input.KeyCode == Enum.KeyCode.R then
+		flying = not flying
+		if flying then
+			velocity.Parent = root
+			flyIdle:Play()
+		else
+			velocity.Parent = nil
+			flyIdle:Stop()
+			flyMove:Stop()
+		end
+	elseif input.KeyCode == Enum.KeyCode.Q and flying then
+		-- DASH
+		dashAnim:Play()
+		velocity.Velocity = root.CFrame.LookVector * 150
+		task.delay(0.2, function()
+			velocity.Velocity = Vector3.zero
+		end)
+	elseif input.KeyCode == Enum.KeyCode.E then
+		-- LASER TOGGLE
+		laserOn = not laserOn
+	end
 end)
 
--- Chiqish tugmasi
-closeButton.MouseButton1Click:Connect(function()
-    screenGui.Enabled = false
+--== FLY MOVEMENT ==--
+RS.RenderStepped:Connect(function()
+	if flying then
+		local moveDir = Vector3.zero
+		if UIS:IsKeyDown(Enum.KeyCode.W) then
+			moveDir = moveDir + root.CFrame.LookVector
+		end
+		if UIS:IsKeyDown(Enum.KeyCode.S) then
+			moveDir = moveDir - root.CFrame.LookVector
+		end
+		if UIS:IsKeyDown(Enum.KeyCode.A) then
+			moveDir = moveDir - root.CFrame.RightVector
+		end
+		if UIS:IsKeyDown(Enum.KeyCode.D) then
+			moveDir = moveDir + root.CFrame.RightVector
+		end
+
+		if moveDir.Magnitude > 0 then
+			velocity.Velocity = moveDir.Unit * 80
+			if not flyMove.IsPlaying then
+				flyIdle:Stop()
+				flyMove:Play()
+			end
+		else
+			velocity.Velocity = Vector3.zero
+			if not flyIdle.IsPlaying then
+				flyMove:Stop()
+				flyIdle:Play()
+			end
+		end
+	end
 end)
 
+--== LASER FIRE ==--
+mouse.Button1Down:Connect(function()
+	if laserOn then
+		local laser = Instance.new("Part")
+		laser.Size = Vector3.new(0.2, 0.2, 4)
+		laser.Anchored = false
+		laser.CanCollide = false
+		laser.Material = Enum.Material.Neon
+		laser.Color = LASER_COLOR
+		laser.CFrame = CFrame.new(char.Head.Position, mouse.Hit.Position)
+		laser.Parent = workspace
+
+		local bv = Instance.new("BodyVelocity")
+		bv.MaxForce = Vector3.new(1e5, 1e5, 1e5)
+		bv.Velocity = laser.CFrame.LookVector * LASER_SPEED
+		bv.Parent = laser
+
+		game:GetService("Debris"):AddItem(laser, LASER_LIFETIME)
+	end
+end)
